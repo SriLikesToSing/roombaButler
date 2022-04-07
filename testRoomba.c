@@ -124,8 +124,6 @@ void COMMAND_ONE() {
     right = digitalRead(isObstaclePin);
     left = digitalRead(isObstaclePin2);
 
-
-
     if (right == LOW && left == HIGH) {
       driveLeft();
     } else if (right == HIGH && left == LOW) {
@@ -149,13 +147,14 @@ void COMMAND_TWO() {
     right = digitalRead(isObstaclePin);
     left = digitalRead(isObstaclePin2);
 
-    if (right == LOW && left == HIGH) {
-      driveLeft();
-    } else if (right == HIGH && left == LOW) {
+    if(right == LOW && left == HIGH) {
       driveRight();
-    } else if (right == LOW && left == LOW) {
+    }else if (right == HIGH && left == LOW) {
+      driveLeft();
+    }else if (right == LOW && left == LOW) {
       driveStraight();
     }else if (right == HIGH && left == HIGH) {
+      driveStop();
       if(count == 0){
         //drive forwards to massaging spot
         count++;
@@ -175,6 +174,7 @@ void COMMAND_TWO() {
         //drive backwards back to the spot
         return;
       }
+      
     }
   }
 }
