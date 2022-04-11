@@ -6,7 +6,7 @@
 int rxPin = 10; //connected to pin 4 (TXD) of iRobot Create 2
 int txPin = 11; //connected to pin 3 (RXD) of iRobot Create 2
 int ddPin = 5;  //connected to pin 5 (BRC) of iRobot Create 2
-int SWITCH = 1;
+int SWITCH = 2;
 
 
 //IR stuff
@@ -117,37 +117,36 @@ void setup() {
 }
 
 
-void COMMAND_ONE() {
+void loop() {
 
-  while (1) {
+  /*
+     while(BT.available()){
+       delay(10);
+       
 
+       if(state == "get me food"){
+         SWITCH = 0;
+         break;
+       }else if(state == "massage me"){
+         SWITCH = 1;
+         break;
+       }else{
+         SWITCH = -1;
+         continue;
+       }
+
+     }
+  */
+
+  if(SWITCH == 1){
+    int count = 0;
+    while(1){
+    //intro sequence
+    
     right = digitalRead(isObstaclePin);
-    left = digitalRead(isObstaclePin2);
+    left = digitalRead(isObstaclePin2);   
 
-    if (right == LOW && left == HIGH) {
-      driveLeft();
-    } else if (right == HIGH && left == LOW) {
-      driveRight();
-    } else if (right == HIGH && left == HIGH) {
-      driveStop();
-      return;
-
-      //once drive stop == 2 then restart the entire system
-    } else if (right == LOW && left == LOW) {
-      driveStraight();
-    }
-  }
-
-}
-
-void COMMAND_TWO() {
-  int count = 1;
-  while (1) {
-
-    right = digitalRead(isObstaclePin);
-    left = digitalRead(isObstaclePin2);
-
-    if(right == LOW && left == HIGH) {
+    if(right == LOW && left == HIGH){
       driveRight();
     }else if (right == HIGH && left == LOW) {
       driveLeft();
@@ -155,6 +154,32 @@ void COMMAND_TWO() {
       driveStraight();
     }else if (right == HIGH && left == HIGH) {
       driveStop();
+      delay(3000);
+      break;   
+      }
+    }
+  }
+
+  if(SWITCH == 2){
+    int count = 1;
+  while(1){
+
+
+    //intro sequence
+    
+  right = digitalRead(isObstaclePin);
+  left = digitalRead(isObstaclePin2);   
+
+    if(right == LOW && left == HIGH){
+      driveRight();
+    }else if (right == HIGH && left == LOW) {
+      driveLeft();
+    }else if (right == LOW && left == LOW) {
+      driveStraight();
+    }else if (right == HIGH && left == HIGH) {
+      driveStop();
+      delay(3000);
+   
       if(count == 0){
         //drive forwards to massaging spot
         count++;
@@ -170,44 +195,16 @@ void COMMAND_TWO() {
           delay(300);
         }
         count++;
+        break;
       }else if(count == 2){
         //drive backwards back to the spot
-        return;
+        
+       }  
       }
-      
     }
   }
 }
 
-
-void loop() {
-
-  /*
-     while(BT.available()){
-       delay(10);
-       //...
-
-       if(state == "food"){
-         SWITCH = 0;
-       }else if(state == "massage"){
-         SWITCH = 1;
-       }else{
-         SWITCH = -1;
-       }
-
-     }
- */
-
-  
-
-  if (SWITCH == 0) {
-    COMMAND_ONE();
-  } else if (SWITCH == 1) {
-    COMMAND_TWO();
-  } else {
-    exit(0);
-  }
-}
 
 
 
