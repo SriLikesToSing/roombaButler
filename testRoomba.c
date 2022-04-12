@@ -18,13 +18,15 @@ int left = HIGH;
 int counter = 0;
 bool initiation = true;
 
-
-
-
-
+//IR Sensor
+int rxPinBlue = 9;
+int txPinBlue = 8;
+String state;
+SoftwareSerial hc06(8,9);
 
 //Set up a new Software Serial Port
 SoftwareSerial softSerial = SoftwareSerial(rxPin, txPin);
+
 
 void wakeUp(void) {
   Serial.println("Wake up!");
@@ -83,10 +85,16 @@ void driveStop(void) {
 
 void setup() {
 
+ 
+  
+
   //IR setupp
+  Serial.println("IR SETUP");
   pinMode(LED, OUTPUT);
   pinMode(isObstaclePin, INPUT);
   Serial.begin(9600);
+
+  
 
   // Defining PinModes
   pinMode(rxPin, INPUT);
@@ -114,31 +122,43 @@ void setup() {
   Serial.println("Start OI in Safe Mode.");
   softSerial.write(128); //Starts the OI
   softSerial.write(131); //Set mode to Safe
+
+
+   //initialize bluetooth
+  Serial.begin(9600);
+  //initialize bluetooth serial port
+  hc06.begin(9600);
 }
 
 
 void loop() {
-
-  /*
-     while(BT.available()){
-       delay(10);
-       
-
-       if(state == "get me food"){
-         SWITCH = 0;
-         break;
-       }else if(state == "massage me"){
-         SWITCH = 1;
-         break;
-       }else{
-         SWITCH = -1;
-         continue;
-       }
-
-     }
+     String state;
+  //Write data from HC06 to Serial Monitor
+  while(hc06.available()){
+    delay(10);
+    char c = hc06.read();
+    state += c;
+  }
+/*
+  if(state.length() > 0){
+    Serial.println(state);
+  }
   */
+  if (hc06.available()){
+    Serial.println("It's printing from here boizo");
+    Serial.write(hc06.read());
+  }
+  
+  //Write from Serial Monitor to HC06
+  if (Serial.available()){
+    hc06.write(Serial.read());
+  }  
 
-  if(SWITCH == 1){
+
+     
+
+  if(state == "food please"){
+    Serial.println("BRUH");
     int count = 0;
     while(1){
     //intro sequence
@@ -160,11 +180,9 @@ void loop() {
     }
   }
 
-  if(SWITCH == 2){
+  if(state == "massage me"){
     int count = 1;
   while(1){
-
-
     //intro sequence
     
   right = digitalRead(isObstaclePin);
@@ -199,10 +217,13 @@ void loop() {
       }else if(count == 2){
         //drive backwards back to the spot
         
-       }  
+        }  
       }
     }
   }
+
+ state = "";
+  
 }
 
 
