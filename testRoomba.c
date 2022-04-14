@@ -85,9 +85,6 @@ void driveStop(void) {
 
 void setup() {
 
- 
-  
-
   //IR setupp
   Serial.println("IR SETUP");
   pinMode(LED, OUTPUT);
@@ -124,27 +121,26 @@ void setup() {
   softSerial.write(131); //Set mode to Safe
 
 
+
    //initialize bluetooth
   Serial.begin(9600);
   //initialize bluetooth serial port
   hc06.begin(9600);
+  
+  
 }
 
 
 void loop() {
-     String state;
+  String state;
   //Write data from HC06 to Serial Monitor
   while(hc06.available()){
     delay(10);
     char c = hc06.read();
     state += c;
   }
-/*
-  if(state.length() > 0){
-    Serial.println(state);
-  }
-  */
-  if (hc06.available()){
+  
+  if(hc06.available()){
     Serial.println("It's printing from here boizo");
     Serial.write(hc06.read());
   }
@@ -153,9 +149,6 @@ void loop() {
   if (Serial.available()){
     hc06.write(Serial.read());
   }  
-
-
-     
 
   if(state == "food please"){
     Serial.println("BRUH");
@@ -181,7 +174,7 @@ void loop() {
   }
 
   if(state == "massage me"){
-    int count = 1;
+  int count = 1;
   while(1){
     //intro sequence
     
@@ -216,7 +209,6 @@ void loop() {
         break;
       }else if(count == 2){
         //drive backwards back to the spot
-        
         }  
       }
     }
