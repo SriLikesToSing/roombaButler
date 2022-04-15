@@ -66,6 +66,7 @@ void driveStraight(void) {
 }
 
 void driveBack(void) {
+  Serial.print("Arc back... ");
   softSerial.write(137);
   softSerial.write((byte)255);
   softSerial.write((byte)56);
@@ -108,6 +109,7 @@ void setup() {
   digitalWrite(ddPin, HIGH);
   delay(2000);
 
+  //cycling bytes to change baud rate
   Serial.println("Set baud rate.");
   for (int i = 0; i < 3; i++) {
     digitalWrite(ddPin, LOW);
@@ -151,8 +153,18 @@ void loop() {
   if(state == "food please"){
     Serial.println("BRUH");
     int count = 0;
+    bool firstTime = true;
     while(1){
     //intro sequence
+
+    if(firstTime == true){
+      driveStraight();
+      delay(1000);
+      driveRight();
+      delay(2000);
+      firstTime = false;
+      continue;
+    }
     
     right = digitalRead(isObstaclePin);
     left = digitalRead(isObstaclePin2);   
@@ -164,6 +176,7 @@ void loop() {
     }else if (right == LOW && left == LOW) {
       driveStraight();
     }else if (right == HIGH && left == HIGH) {
+     
       if(count == 0){
         driveStop();
         delay(7000);
@@ -175,7 +188,7 @@ void loop() {
         driveStop();
         delay(2000);
         driveBack();
-        delay(7000);
+        delay(5000);
         driveStop();
         break;
         }
@@ -185,10 +198,12 @@ void loop() {
 
   if(state == "massage me"){
   int count = 0;
+  
   while(1){
     
   right = digitalRead(isObstaclePin);
   left = digitalRead(isObstaclePin2);   
+    
 
     if(right == LOW && left == HIGH){
       driveRight();
@@ -209,14 +224,14 @@ void loop() {
         delay(3000);
         for(int x=0; x<10; x++){
           driveBack();
-          delay(300);
+          delay(600);
           driveStraight();
-          delay(300);
+          delay(600);
         }
         driveStop();
         delay(2000);
         driveBack();
-        delay(7000);
+        delay(5300);
         driveStop();
         break;
        } 
