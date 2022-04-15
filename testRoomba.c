@@ -126,13 +126,11 @@ void setup() {
   Serial.begin(9600);
   //initialize bluetooth serial port
   hc06.begin(9600);
-  
-  
+  String state;
 }
 
-
 void loop() {
-  String state;
+  
   //Write data from HC06 to Serial Monitor
   while(hc06.available()){
     delay(10);
@@ -174,9 +172,8 @@ void loop() {
   }
 
   if(state == "massage me"){
-  int count = 1;
+  int count = 0;
   while(1){
-    //intro sequence
     
   right = digitalRead(isObstaclePin);
   left = digitalRead(isObstaclePin2);   
@@ -188,9 +185,6 @@ void loop() {
     }else if (right == LOW && left == LOW) {
       driveStraight();
     }else if (right == HIGH && left == HIGH) {
-      driveStop();
-      delay(3000);
-   
       if(count == 0){
         //drive forwards to massaging spot
         count++;
@@ -205,17 +199,17 @@ void loop() {
           driveStraight();
           delay(300);
         }
-        count++;
+        driveStop();
+        delay(2000);
+        driveBack();
+        delay(7000);
+        driveStop();
         break;
-      }else if(count == 2){
-        //drive backwards back to the spot
-        }  
+       } 
       }
     }
   }
-
  state = "";
-  
 }
 
 
