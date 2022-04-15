@@ -164,9 +164,21 @@ void loop() {
     }else if (right == LOW && left == LOW) {
       driveStraight();
     }else if (right == HIGH && left == HIGH) {
-      driveStop();
-      delay(3000);
-      break;   
+      if(count == 0){
+        driveStop();
+        delay(7000);
+        driveRight();
+        delay(5000);
+        count++;
+        continue;
+      }else if(count == 1){
+        driveStop();
+        delay(2000);
+        driveBack();
+        delay(7000);
+        driveStop();
+        break;
+        }
       }
     }
   }
@@ -185,11 +197,13 @@ void loop() {
     }else if (right == LOW && left == LOW) {
       driveStraight();
     }else if (right == HIGH && left == HIGH) {
+      
       if(count == 0){
         //drive forwards to massaging spot
         count++;
         continue;
       }
+      
       if(count == 1){
         driveStop();
         delay(3000);
